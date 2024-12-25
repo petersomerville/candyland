@@ -5,3 +5,5 @@ Peter is practicing his software development skills by building a website simila
 # Here is a beautiful painting of what it will be like to play Candyland:
 
 ![Alt text](images/arithmetic-candyland.jpeg)
+
+Featuring Mr. Arithmetic the dragon!
