@@ -7,3 +7,6 @@ Peter is practicing his software development skills by building a website simila
 ![Alt text](images/arithmetic-candyland.jpeg)
 
 Featuring Mr. Arithmetic the dragon!
+
+You never know when Mr. Arithmetic will appear in Candyland!
+He loves candy... and arithmetic.
