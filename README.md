@@ -9,4 +9,4 @@ Peter is practicing his software development skills by building a website simila
 Featuring Mr. Arithmetic the dragon!
 
 You never know when Mr. Arithmetic will appear in Candyland!
-He loves candy... and arithmetic.
+He loves candy... and arithmetic. Especially arithmetic.
