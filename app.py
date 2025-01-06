@@ -73,22 +73,28 @@ def home():
 def new_game():
     game = CandylandGame()
     session['game'] = game.__dict__
-    return jsonify({'status': 'success'})
-
-@app.route('/draw_card', methods=['POST'])
-def draw_card():
-    game = CandylandGame()
-    game.__dict__ = session['game']
-    
-    card = game.draw_card()
-    game.move_player(card)
-    
-    session['game'] = game.__dict__
     return jsonify({
-        'card': card,
+        'status': 'success',
         'players': game.players,
         'current_player': game.current_player
     })
+
+@app.route('/draw_card', methods=['POST'])
+def draw_card():
+    game_data = session.get('game')
+    if game_data:
+        game = CandylandGame()
+        game.__dict__.update(game_data)
+        card = game.draw_card()
+        game.move_player(card)
+        session['game'] = game.__dict__
+        return jsonify({
+            'card': card,
+            'players': game.players,
+            'current_player': game.current_player
+        })
+    else:
+        return jsonify({'error': 'Game not initialized'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
