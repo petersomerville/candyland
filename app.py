@@ -42,6 +42,7 @@ class CandylandGame:
     def move_player(self, card):
         current_pos = self.players[self.current_player]
 
+        # Ensure the player advances to the next matching space
         for i in range(current_pos + 1, len(self.spaces)):
             if self.spaces[i]['type'] == 'regular' and self.spaces[i]['color'] == card:
                 self.players[self.current_player] = i
