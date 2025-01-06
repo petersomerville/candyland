@@ -1,4 +1,3 @@
-<!-- templates/game.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +19,13 @@
             align-items: center;
             justify-content: center;
         }
+        
+        .space:nth-child(6n+1) { background-color: red; }
+        .space:nth-child(6n+2) { background-color: purple; }
+        .space:nth-child(6n+3) { background-color: yellow; }
+        .space:nth-child(6n+4) { background-color: blue; }
+        .space:nth-child(6n+5) { background-color: orange; }
+        .space:nth-child(6n) { background-color: green; }
         
         .player-token {
             width: 20px;
@@ -85,10 +91,7 @@
         }
         
         function updatePlayerPositions(players) {
-            // Clear existing tokens
             document.querySelectorAll('.player-token').forEach(token => token.remove());
-            
-            // Add tokens at new positions
             Object.entries(players).forEach(([player, position]) => {
                 const space = document.querySelector(`[data-index="${position}"]`);
                 const token = document.createElement('div');
@@ -99,7 +102,6 @@
         
         function createBoard() {
             const board = document.getElementById('board');
-            // Create 60 spaces (simplified version)
             for (let i = 0; i < 60; i++) {
                 const space = document.createElement('div');
                 space.className = 'space';
@@ -108,7 +110,6 @@
             }
         }
         
-        // Initialize the game board
         createBoard();
         newGame();
     </script>
