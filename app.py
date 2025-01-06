@@ -2,12 +2,11 @@ from flask import Flask, render_template, jsonify, request, session
 from random import shuffle
 import json
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Required for session management
 
 class CandylandGame:
     def __init__(self):
-        # Define the board spaces
         self.spaces = [
             {'type': 'regular', 'color': 'red'},
             {'type': 'regular', 'color': 'purple'},
@@ -17,50 +16,37 @@ class CandylandGame:
             {'type': 'regular', 'color': 'green'},
             {'type': 'special', 'name': 'Peppermint Forest'},
         ]
-        
-        # Create the deck of cards
         self.create_deck()
-        
-        # Player positions (0-based index on board)
         self.players = {
             'player1': 0,
             'player2': 0,
             'player3': 0,
             'player4': 0
         }
-        
         self.current_player = 'player1'
-    
+
     def create_deck(self):
-        """Create and shuffle the deck of cards"""
         self.deck = []
         colors = ['red', 'purple', 'yellow', 'blue', 'orange', 'green']
         for color in colors:
-            self.deck.extend([color] * 6)  
+            self.deck.extend([color] * 6)
         special_locations = ['Peppermint Forest', 'Lollipop Woods', 'Gummy Hills']
         self.deck.extend(special_locations)
-        
         shuffle(self.deck)
-    
+
     def draw_card(self):
         if not self.deck:
             self.create_deck()
         return self.deck.pop()
-    
+
     def move_player(self, card):
         current_pos = self.players[self.current_player]
-        
-        if isinstance(card, str) and card in ['Peppermint Forest', 'Lollipop Woods', 'Gummy Hills']:
-            for i in range(current_pos + 1, len(self.spaces)):
-                if self.spaces[i]['type'] == 'special' and self.spaces[i]['name'] == card:
-                    self.players[self.current_player] = i
-                    break
-        else:
-            for i in range(current_pos + 1, len(self.spaces)):
-                if self.spaces[i]['type'] == 'regular' and self.spaces[i]['color'] == card:
-                    self.players[self.current_player] = i
-                    break
-        
+
+        for i in range(current_pos + 1, len(self.spaces)):
+            if self.spaces[i]['type'] == 'regular' and self.spaces[i]['color'] == card:
+                self.players[self.current_player] = i
+                break
+
         player_list = list(self.players.keys())
         next_index = (player_list.index(self.current_player) + 1) % len(player_list)
         self.current_player = player_list[next_index]
