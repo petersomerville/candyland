@@ -27,8 +27,11 @@
         .space:nth-child(6n+4) { background-color: blue; }
         .space:nth-child(6n+5) { background-color: orange; }
         .space:nth-child(6n) { background-color: green; }
-        
+
+        .special { background-color: pink; font-weight: bold; }
+
         .player-token {
+            border: 2px solid white;
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -96,19 +99,38 @@
         function updatePlayerPositions(players) {
             document.querySelectorAll('.player-token').forEach(token => token.remove());
             Object.entries(players).forEach(([player, position]) => {
+                const currentCard = document.getElementById('current-card').innerHTML;
+                const specialSpaces = {
+                    'Peppermint Forest': 7,
+                    'Lollipop Woods': 15,
+                    'Gummy Hills': 23
+                };
+
+                if (specialSpaces[currentCard]) {
+                    position = specialSpaces[currentCard];
+                    players[player] = position;
+                }
+                
                 const space = document.querySelector(`[data-index="${position}"]`);
-                const token = document.createElement('div');
-                token.className = `player-token ${player}`;
-                space.appendChild(token);
+                if (space) {
+                    const token = document.createElement('div');
+                    token.className = `player-token ${player}`;
+                    space.appendChild(token);
+                }
             });
         }
-        
+
         function createBoard() {
             const board = document.getElementById('board');
+            const specialSpaces = {7: 'Peppermint Forest', 15: 'Lollipop Woods', 23: 'Gummy Hills'};
             for (let i = 0; i < 60; i++) {
                 const space = document.createElement('div');
                 space.className = 'space';
                 space.setAttribute('data-index', i);
+                if (specialSpaces[i]) {
+                    space.classList.add('special');
+                    space.textContent = specialSpaces[i];
+                }
                 board.appendChild(space);
             }
         }
