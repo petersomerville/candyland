@@ -18,6 +18,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         
         .space:nth-child(6n+1) { background-color: red; }
@@ -34,10 +35,10 @@
             position: absolute;
         }
         
-        .player1 { background-color: blue; }
-        .player2 { background-color: red; }
-        .player3 { background-color: green; }
-        .player4 { background-color: yellow; }
+        .player1 { background-color: blue; top: 5px; left: 5px; }
+        .player2 { background-color: red; top: 5px; right: 5px; }
+        .player3 { background-color: green; bottom: 5px; left: 5px; }
+        .player4 { background-color: yellow; bottom: 5px; right: 5px; }
         
         .controls {
             text-align: center;
