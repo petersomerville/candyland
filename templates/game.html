@@ -97,9 +97,11 @@
             document.querySelectorAll('.player-token').forEach(token => token.remove());
             Object.entries(players).forEach(([player, position]) => {
                 const space = document.querySelector(`[data-index="${position}"]`);
-                const token = document.createElement('div');
-                token.className = `player-token ${player}`;
-                space.appendChild(token);
+                if (space) {
+                    const token = document.createElement('div');
+                    token.className = `player-token ${player}`;
+                    space.appendChild(token);
+                }
             });
         }
         
