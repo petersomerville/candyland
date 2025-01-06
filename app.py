@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify, request, session
 from random import shuffle
 import json
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.secret_key = 'your-secret-key-here'  # Required for session management
 
 class CandylandGame:
