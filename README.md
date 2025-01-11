@@ -10,3 +10,4 @@ Featuring Mr. Arithmetic the dragon!
 
 You never know when Mr. Arithmetic will appear in Candyland!
 He loves candy... and arithmetic. Especially arithmetic.
+Yay for math! And Candyland!
