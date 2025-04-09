@@ -40,12 +40,12 @@ class Board:
 
         # Create basic board with repeating colors
         for i in range(total_spaces):
-            # first space is start
+            # first square is the START square
             if i == 0:
                 board.append(Square(i, color=None, is_start=True))
-            # last space is finish
+            # last square is the finish square, now red
             elif i == total_spaces - 1:
-                board.append(Square(i, color=None, is_finish=True))
+                board.append(Square(i, color="red", is_finish=True))
             else:
                 color = COLORS[(i-1) % len(COLORS)]
                 board.append(Square(i, color=color))
@@ -307,7 +307,7 @@ game_template = """
   <div class="board">
   {% for square in game.board.spaces %}
     <div class="square" style="background-color: {{ square.color if square.color else '#ccc' }};">
-      {% if square.is_start %}START{% elif square.is_finish %}FIN{% elif square.is_picture %}{{ square.picture_name[0:3] }}{% else %}{{ square.index }}{% endif %}
+      {% if square.is_start %}START{% elif square.is_finish %}END{% elif square.is_picture %}{{ square.picture_name[0:3] }}{% else %}{{ square.index }}{% endif %}
       {% for p in game.players %}
         {% if p.position == square.index %}
           <div class="pawn" style="background-color: {{ p.pawn_color }};"></div>
