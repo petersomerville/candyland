@@ -125,29 +125,31 @@ class Deck:
         return card
 
 class Player:
-    def __init__(self, pid, pawn_color):
+    def __init__(self, pid, pawn_color, name):
         self.pid = pid
         self.pawn_color = pawn_color
+        self.name = name
         self.position = 0
         self.skip_turn = False
 
 class Game:
-    def __init__(self, num_players):
+    def __init__(self, num_players, names):
         self.status = "Setup"
         self.board = Board()
         self.deck = Deck()
         self.players = []
         self.current_player_index = 0
         self.winner = None
-        self.init_players(num_players)
+        self.init_players(num_players, names)
         self.status = "InProgress"
         self.messages = []  # for game event messages
 
-    def init_players(self, num_players):
-        # Assign pawn colors from the COLORS list (cycle if needed)
+    def init_players(self, num_players, names):
+        # Assign pawn colors from the COLORS list (cycle if needed) and use provided names.
         for i in range(num_players):
             pawn_color = COLORS[i % len(COLORS)]
-            self.players.append(Player(i+1, pawn_color))
+            name = names[i] if i < len(names) and names[i] else f"Player {i+1}"
+            self.players.append(Player(i+1, pawn_color, name))
 
     def get_current_player(self):
         return self.players[self.current_player_index]
@@ -180,14 +182,14 @@ class Game:
                     break
 
         # Update player position and record move message.
-        move_msg = f"Player {player.pid} moves from {orig_position} to {new_position} due to {card}."
+        move_msg = f"Player {player.name} moves from {orig_position} to {new_position} due to {card}."
         self.messages.append(move_msg)
         player.position = new_position
 
         # Check for shortcut: Only trigger if move was due to color card (not picture card)
         current_square = board[player.position]
         if current_square.is_shortcut_start and card.card_type in ['single', 'double']:
-            shortcut_msg = f"Player {player.pid} took shortcut from {player.position} to {current_square.shortcut_target}."
+            shortcut_msg = f"Player {player.name} took shortcut from {player.position} to {current_square.shortcut_target}."
             self.messages.append(shortcut_msg)
             player.position = current_square.shortcut_target
             # Do not chain shortcuts further
@@ -196,7 +198,7 @@ class Game:
         current_square = board[player.position]
         if current_square.is_lose_turn:
             player.skip_turn = True
-            self.messages.append(f"Player {player.pid} landed on Molasses Swamp! Lose next turn.")
+            self.messages.append(f"Player {player.name} landed on Molasses Swamp! Lose next turn.")
 
         # Check win condition: if player has reached or passed the finish square.
         if player.position >= board[-1].index:
@@ -207,13 +209,13 @@ class Game:
         player = self.get_current_player()
         # Check if player should skip turn
         if player.skip_turn:
-            self.messages.append(f"Player {player.pid} loses a turn.")
+            self.messages.append(f"Player {player.name} loses a turn.")
             player.skip_turn = False
             self.advance_turn()
             return None  # indicate no card drawn
 
         card = self.deck.draw()
-        self.messages.append(f"Player {player.pid} drew {card}.")
+        self.messages.append(f"Player {player.name} drew {card}.")
         self.move_player(player, card)
 
         # Check if game finished
@@ -235,14 +237,39 @@ setup_template = """
 <html>
 <head>
   <title>Candyland Setup</title>
+  <script>
+    function updatePlayerFields() {
+      var numPlayers = document.querySelector('input[name="num_players"]:checked').value;
+      for (var i = 1; i <= 4; i++) {
+        document.getElementById('player' + i + '_div').style.display = (i <= numPlayers) ? 'block' : 'none';
+      }
+    }
+    window.onload = updatePlayerFields;
+  </script>
 </head>
 <body>
   <h1>Welcome to Candyland!</h1>
   <form action="{{ url_for('start') }}" method="post">
     <label>Select Number of Players:</label><br>
-    <input type="radio" name="num_players" value="2" required>2<br>
-    <input type="radio" name="num_players" value="3">3<br>
-    <input type="radio" name="num_players" value="4">4<br><br>
+    <input type="radio" name="num_players" value="2" required onchange="updatePlayerFields()">2<br>
+    <input type="radio" name="num_players" value="3" onchange="updatePlayerFields()">3<br>
+    <input type="radio" name="num_players" value="4" onchange="updatePlayerFields()">4<br><br>
+    <div id="player1_div">
+      <label>Player 1 Name:</label>
+      <input type="text" name="player1" required><br>
+    </div>
+    <div id="player2_div">
+      <label>Player 2 Name:</label>
+      <input type="text" name="player2" required><br>
+    </div>
+    <div id="player3_div" style="display:none;">
+      <label>Player 3 Name:</label>
+      <input type="text" name="player3"><br>
+    </div>
+    <div id="player4_div" style="display:none;">
+      <label>Player 4 Name:</label>
+      <input type="text" name="player4"><br>
+    </div><br>
     <input type="submit" value="Start Game">
   </form>
 </body>
@@ -255,41 +282,26 @@ game_template = """
 <head>
   <title>Candyland Game</title>
   <style>
-    .board { display: flex; flex-wrap: wrap; width: 600px; }
-    .square { width: 40px; height: 40px; border: 1px solid #000; 
-              display: flex; align-items: center; justify-content: center; font-size: 10px; }
-    .pawn { border-radius: 50%; width: 20px; height: 20px; }
+    .board { display: flex; flex-wrap: wrap; width: 1200px; }
+    .square { 
+              width: 80px; 
+              height: 80px; 
+              border: 1px solid #000; 
+              display: flex; 
+              align-items: center; 
+              justify-content: center; 
+              font-size: 16px; 
+            }
+    .pawn { 
+              border-radius: 50%; 
+              width: 40px; 
+              height: 40px; 
+              border: 1px solid black;  /* added border */
+            }
   </style>
 </head>
 <body>
   <h1>Candyland</h1>
-  {% if game.status == "Finished" %}
-    <h2>Player {{ game.winner.pid }} Wins!</h2>
-    <form action="{{ url_for('reset') }}" method="post">
-      <input type="submit" value="Play Again">
-    </form>
-  {% else %}
-    <h3>Current Turn: Player {{ game.get_current_player().pid }}</h3>
-    <form action="{{ url_for('draw') }}" method="post">
-      <input type="submit" value="Draw Card">
-    </form>
-  {% endif %}
-  
-  <h3>Messages:</h3>
-  <ul>
-    {% for msg in game.messages %}
-      <li>{{ msg }}</li>
-    {% endfor %}
-  </ul>
-  
-  <h3>Player Positions:</h3>
-  <ul>
-    {% for p in game.players %}
-      <li>Player {{ p.pid }} ({{ p.pawn_color }}): Position {{ p.position }}
-        {% if p.skip_turn %} - Loses Next Turn{% endif %}
-      </li>
-    {% endfor %}
-  </ul>
   
   <h3>Board:</h3>
   <div class="board">
@@ -304,6 +316,34 @@ game_template = """
     </div>
   {% endfor %}
   </div>
+  
+  {% if game.status == "Finished" %}
+    <h2>{{ game.winner.name }} Wins!</h2>
+    <form action="{{ url_for('reset') }}" method="post">
+      <input type="submit" value="Play Again">
+    </form>
+  {% else %}
+    <h3>Current Turn: {{ game.get_current_player().name }}</h3>
+    <form action="{{ url_for('draw') }}" method="post">
+      <input type="submit" value="Draw Card">
+    </form>
+  {% endif %}
+  
+  <h3>Messages (last 6):</h3>
+  <ul>
+    {% for msg in game.messages[-6:] %}
+      <li>{{ msg }}</li>
+    {% endfor %}
+  </ul>
+  
+  <h3>Player Positions:</h3>
+  <ul>
+    {% for p in game.players %}
+      <li>{{ p.name }} ({{ p.pawn_color }}): Position {{ p.position }}
+        {% if p.skip_turn %} - Loses Next Turn{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
 </body>
 </html>
 """
@@ -316,7 +356,12 @@ def setup():
 def start():
     global game
     num_players = int(request.form.get("num_players"))
-    game = Game(num_players)
+    # Retrieve names from request. Only required for players up to num_players.
+    names = []
+    for i in range(1, num_players + 1):
+        name = request.form.get(f"player{i}")
+        names.append(name)
+    game = Game(num_players, names)
     return redirect(url_for("game_route"))
 
 @app.route("/game", methods=["GET"])
