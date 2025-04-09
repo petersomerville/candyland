@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Candyland Setup</title>
+  <script>
+    function updatePlayerFields() {
+      var numPlayers = document.querySelector('input[name="num_players"]:checked').value;
+      for (var i = 1; i <= 4; i++) {
+        document.getElementById('player' + i + '_div').style.display = (i <= numPlayers) ? 'block' : 'none';
+      }
+    }
+    window.onload = updatePlayerFields;
+  </script>
+</head>
+<body>
+  <h1>Welcome to Candyland!</h1>
+  <form action="{{ url_for('start') }}" method="post">
+    <label>Select Number of Players:</label><br>
+    <input type="radio" name="num_players" value="2" required onchange="updatePlayerFields()">2<br>
+    <input type="radio" name="num_players" value="3" onchange="updatePlayerFields()">3<br>
+    <input type="radio" name="num_players" value="4" onchange="updatePlayerFields()">4<br><br>
+    <div id="player1_div">
+      <label>Player 1 Name:</label>
+      <input type="text" name="player1" required><br>
+    </div>
+    <div id="player2_div">
+      <label>Player 2 Name:</label>
+      <input type="text" name="player2" required><br>
+    </div>
+    <div id="player3_div" style="display:none;">
+      <label>Player 3 Name:</label>
+      <input type="text" name="player3"><br>
+    </div>
+    <div id="player4_div" style="display:none;">
+      <label>Player 4 Name:</label>
+      <input type="text" name="player4"><br>
+    </div><br>
+    <input type="submit" value="Start Game">
+  </form>
+</body>
+</html>
