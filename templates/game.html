@@ -10,7 +10,17 @@
   <h3>Board:</h3>
   <div class="board">
     {% for square in game.board.spaces %}
-      <div class="square" style="background-color: {% if square.color %}{{ square.color }}{% else %}#ccc{% endif %};">
+      {% set square_classes = ['square'] %}
+      {% if square.is_start %}
+        {% set square_classes = square_classes + ['start-square'] %}
+      {% endif %}
+      {% if square.is_finish %}
+        {% set square_classes = square_classes + ['finish-square'] %}
+      {% endif %}
+      {% if square.is_picture %}
+        {% set square_classes = square_classes + ['picture-square', 'picture-' + square.picture_name|lower|replace(' ', '-')] %}
+      {% endif %}
+      <div class="{{ square_classes|join(' ') }}" style="background-color: {% if square.color %}{{ square.color }}{% else %}#ccc{% endif %};">
         {% if square.is_start %}
           START
         {% elif square.is_finish %}
@@ -20,9 +30,13 @@
         {% else %}
           {{ square.index }}
         {% endif %}
+        {% set pawn_count = 0 %}
         {% for p in game.players %}
           {% if p.position == square.index %}
-            <div class="pawn" style="background-color: {% if p.pawn_color %}{{ p.pawn_color }}{% else %}#fff{% endif %};"></div>
+            {% set pawn_count = pawn_count + 1 %}
+            <div class="pawn" title="{{ p.name }}" style="background-color: {% if p.pawn_color %}{{ p.pawn_color }}{% else %}#888{% endif %};">
+              {# Optionally add player initial inside pawn #}
+            </div>
           {% endif %}
         {% endfor %}
       </div>
@@ -52,7 +66,8 @@
   <ul>
     {% for p in game.players %}
       <li>
-        {{ p.name }} ({{ p.pawn_color }}): Position {{ p.position }} 
+        <span class="pawn-inline" style="background-color: {{ p.pawn_color | default('#888') }};"></span>
+        {{ p.name }}: Position {{ p.position }}
         {% if p.skip_turn %} - Loses Next Turn{% endif %}
       </li>
     {% endfor %}
