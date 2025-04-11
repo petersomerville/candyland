@@ -1,9 +1,7 @@
-<<<<<<< HEAD
-from flask import Flask, request, redirect, url_for, render_template, flash
-=======
-from flask import Flask, request, redirect, url_for, render_template
->>>>>>> 73917a598fdd2d8fd9652ac53c6d0e0664805c62
 import random
+
+from flask import Flask, request, redirect, url_for, render_template, flash
+
 
 app = Flask(__name__)
 app.secret_key = 'candyland-secret-key'  # for flash messages
