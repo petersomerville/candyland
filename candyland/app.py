@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from flask import Flask, request, redirect, url_for, render_template, flash
-=======
 from flask import Flask, request, redirect, url_for, render_template
->>>>>>> 73917a598fdd2d8fd9652ac53c6d0e0664805c62
 import random
 
 app = Flask(__name__)
@@ -44,15 +40,17 @@ class Board:
 
         # Create basic board with repeating colors
         for i in range(total_spaces):
+            # first square is the START square
             if i == 0:
                 board.append(Square(i, color=None, is_start=True))
+            # last square is the finish square, now red
             elif i == total_spaces - 1:
                 board.append(Square(i, color="red", is_finish=True))
             else:
                 color = COLORS[(i-1) % len(COLORS)]
                 board.append(Square(i, color=color))
 
-        # Mark picture spaces at fixed indices:
+        # Mark picture spaces at fixed indices as an example:
         picture_positions = {
             10: "Peppermint Forest",
             30: "Gumdrop Mountain",
@@ -65,6 +63,7 @@ class Board:
             if pos < total_spaces:
                 board[pos].is_picture = True
                 board[pos].picture_name = name
+                # Mark Gloppy's space as lose turn (Molasses Swamp) if applicable
                 if name == "Gloppy the Molasses Monster":
                     board[pos].is_lose_turn = True
 
@@ -79,7 +78,7 @@ class Board:
 
 class Card:
     def __init__(self, card_type, value):
-        self.card_type = card_type  # 'single', 'double', or 'picture'
+        self.card_type = card_type
         self.value = value
 
     def __repr__(self):
@@ -96,21 +95,24 @@ class Deck:
         self.shuffle()
 
     def build_deck(self):
+        # Add single color cards (6 of each)
         for color in COLORS:
             for _ in range(6):
                 self.draw_pile.append(Card('single', color))
+        # Add double color cards (2 of each)
         for color in COLORS:
             for _ in range(2):
                 self.draw_pile.append(Card('double', color))
+        # Add picture cards (1 of each)
         for pic in PICTURE_CARDS:
             self.draw_pile.append(Card('picture', pic))
-        # Total cards: 6*6 + 2*6 + 6 = 54
 
     def shuffle(self):
         random.shuffle(self.draw_pile)
 
     def draw(self):
         if not self.draw_pile:
+            # Reshuffle discard pile into draw pile if empty.
             self.draw_pile = self.discard_pile.copy()
             self.discard_pile = []
             self.shuffle()
@@ -136,7 +138,7 @@ class Game:
         self.winner = None
         self.init_players(num_players, names)
         self.status = "InProgress"
-        self.messages = []
+        self.messages = []  # for game event messages
 
     def init_players(self, num_players, names):
         for i in range(num_players):
@@ -180,7 +182,6 @@ class Game:
             self.messages.append(shortcut_msg)
             player.position = current_square.shortcut_target
 
-        current_square = board[player.position]
         if current_square.is_lose_turn:
             player.skip_turn = True
             self.messages.append(f"Player {player.name} landed on Molasses Swamp! Lose next turn.")
@@ -196,11 +197,14 @@ class Game:
             player.skip_turn = False
             self.advance_turn()
             return None
+
         card = self.deck.draw()
         self.messages.append(f"Player {player.name} drew {card}.")
         self.move_player(player, card)
+
         if self.status == "Finished":
             return card
+
         self.advance_turn()
         return card
 
@@ -208,10 +212,7 @@ class Game:
 game = None
 
 # ---------- Flask Routes ----------
-<<<<<<< HEAD
 
-=======
->>>>>>> 73917a598fdd2d8fd9652ac53c6d0e0664805c62
 @app.route("/", methods=["GET"])
 def setup():
     return render_template("setup.html")
