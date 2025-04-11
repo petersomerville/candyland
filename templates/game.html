@@ -54,12 +54,34 @@
     </form>
   {% endif %}
   
-  {% if game.last_card is defined and game.last_card != '' %}
-    <div class="drawn-card">
-      <h3>Drawn Card</h3>
-      <p>{{ game.last_card }}</p>
+  {# Display the last drawn card visually if it exists #}
+  {% if game.last_card %}
+    <div class="drawn-card-container">
+      <h3>Drawn Card:</h3>
+      <div class="drawn-card-visual">
+        {% if game.last_card.card_type == 'single' %}
+          {# Display one colored square #}
+          <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
+          <span class="card-text-label">{{ game.last_card.value|title }}</span> {# Optional text label #}
+
+        {% elif game.last_card.card_type == 'double' %}
+          {# Display two colored squares #}
+          <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
+          <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
+           <span class="card-text-label">Double {{ game.last_card.value|title }}</span> {# Optional text label #}
+
+        {% elif game.last_card.card_type == 'picture' %}
+          {# Display picture name (or image later) #}
+          <div class="card-picture">
+            {# You could eventually replace this text with an <img> tag #}
+            {# <img src="{{ url_for('static', filename='images/' + game.last_card.value|lower|replace(' ', '_') + '.png') }}" alt="{{ game.last_card.value }}"> #}
+            <span>{{ game.last_card.value }}</span>
+          </div>
+        {% endif %}
+      </div>
     </div>
   {% endif %}
+
   
   <h3>Last 6 Moves:</h3>
   <ul>
