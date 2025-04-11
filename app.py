@@ -249,7 +249,8 @@ class Game:
 
         card = self.deck.draw()
         # --- ADD THIS LINE ---
-        self.last_card = str(card) # Store the string representation of the drawn card
+        # self.last_card = str(card) # Store the string representation of the drawn card
+        self.last_card = card # Store the actual Card object
 
         # Add message about the draw *before* moving
         self.messages.append(f"{player.name} drew: {self.last_card}.")
