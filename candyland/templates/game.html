@@ -2,10 +2,10 @@
 <html>
 <head>
   <title>Candyland Game</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <h1>Peter's Candyland</h1>
+  <h1>Candyland</h1>
   
   <h3>Board:</h3>
   <div class="board">
@@ -33,7 +33,7 @@
     </form>
   {% endif %}
   
-  <h3>Last 6 Moves:</h3>
+  <h3>Messages (last 6):</h3>
   <ul>
     {% for msg in game.messages[-6:] %}
       <li>{{ msg }}</li>
