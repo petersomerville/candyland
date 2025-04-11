@@ -9,28 +9,24 @@
   
   <h3>Board:</h3>
   <div class="board">
-  {% for square in game.board.spaces %}
-    <div class="square" style="background-color: {{ square.color if square.color else '#ccc' }};">
-      {% if square.is_start %}START{% elif square.is_finish %}END{% elif square.is_picture %}{{ square.picture_name[0:3] }}{% else %}{{ square.index }}{% endif %}
-      {% for p in game.players %}
-        {% if p.position == square.index %}
-          <div class="pawn" style="background-color: {{ p.pawn_color }};"></div>
+    {% for square in game.board.spaces %}
+      <div class="square" style="background-color: {% if square.color %}{{ square.color }}{% else %}#ccc{% endif %};">
+        {% if square.is_start %}
+          START
+        {% elif square.is_finish %}
+          END
+        {% elif square.is_picture %}
+          {{ square.picture_name[0:3] }}
+        {% else %}
+          {{ square.index }}
         {% endif %}
-      {% endfor %}
-  <h1>Peter's Candyland</h1>
-  
-  <h3>Board:</h3>
-  <div class="board">
-  {% for square in game.board.spaces %}
-    <div class="square" style="background-color: {{ square.color if square.color else '#ccc' }};">
-      {% if square.is_start %}START{% elif square.is_finish %}END{% elif square.is_picture %}{{ square.picture_name[0:3] }}{% else %}{{ square.index }}{% endif %}
-      {% for p in game.players %}
-        {% if p.position == square.index %}
-          <div class="pawn" style="background-color: {{ p.pawn_color }};"></div>
-        {% endif %}
-      {% endfor %}
-    </div>
-  {% endfor %}
+        {% for p in game.players %}
+          {% if p.position == square.index %}
+            <div class="pawn" style="background-color: {% if p.pawn_color %}{{ p.pawn_color }}{% else %}#fff{% endif %};"></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
   </div>
   
   {% if game.status == "Finished" %}
@@ -55,7 +51,8 @@
   <h3>Player Positions:</h3>
   <ul>
     {% for p in game.players %}
-      <li>{{ p.name }} ({{ p.pawn_color }}): Position {{ p.position }}
+      <li>
+        {{ p.name }} ({{ p.pawn_color }}): Position {{ p.position }} 
         {% if p.skip_turn %} - Loses Next Turn{% endif %}
       </li>
     {% endfor %}
