@@ -1,5 +1,5 @@
 body {
-  font-family: 'Comic Sans MS', cursive, sans-serif; /* Candyland-esque font */
+  font-family: Arial, sans-serif; /* Updated font */
   background-color: #f0f8ff; /* Light, playful background */
   color: #333;
 }
@@ -114,4 +114,15 @@ li {
   padding: 8px;
   border-radius: 4px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.drawn-card {
+  margin: 20px auto;
+  padding: 15px;
+  width: 60%;
+  background-color: #fff;
+  border: 2px dashed #ff69b4;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
