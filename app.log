@@ -1,0 +1,60 @@
+[2025-04-11 11:05:30,326] DEBUG in app: Logging configuration loaded.
+[2025-04-11 11:05:30,331] INFO in app: Starting Candyland app.
+[2025-04-11 11:05:30,414] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.4.21:5000
+[2025-04-11 11:05:30,414] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2025-04-11 11:05:30,415] INFO in _internal:  * Restarting with stat
+[2025-04-11 11:05:30,618] DEBUG in app: Logging configuration loaded.
+[2025-04-11 11:05:30,621] INFO in app: Starting Candyland app.
+[2025-04-11 11:05:30,651] WARNING in _internal:  * Debugger is active!
+[2025-04-11 11:05:30,685] INFO in _internal:  * Debugger PIN: 275-399-811
+[2025-04-11 11:05:44,240] DEBUG in app: Setup route accessed, resetting game.
+[2025-04-11 11:05:44,275] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:05:44] "GET / HTTP/1.1" 200 -
+[2025-04-11 11:05:53,480] INFO in app: Initializing game with 3 players.
+[2025-04-11 11:05:53,481] DEBUG in app: Player added: Peter with color #FF0000
+[2025-04-11 11:05:53,481] DEBUG in app: Player added: Theo with color #0000FF
+[2025-04-11 11:05:53,481] DEBUG in app: Player added: Audrey with color #FFFF00
+[2025-04-11 11:05:53,482] DEBUG in app: Game initialized: <__main__.Game object at 0x10b09d550>
+[2025-04-11 11:05:53,482] INFO in app: Game started with players: ['Peter', 'Theo', 'Audrey']
+[2025-04-11 11:05:53,483] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:05:53] "[32mPOST /start HTTP/1.1[0m" 302 -
+[2025-04-11 11:05:53,492] DEBUG in app: Rendering game board for current state.
+[2025-04-11 11:05:53,549] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:05:53] "GET /game HTTP/1.1" 200 -
+[2025-04-11 11:05:53,603] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:05:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+[2025-04-11 11:06:03,002] DEBUG in app: Processing draw for current player: Peter
+[2025-04-11 11:06:03,002] INFO in app: Player Peter's turn.
+[2025-04-11 11:06:03,002] INFO in app: Peter drew: Single Red.
+[2025-04-11 11:06:03,002] INFO in app: Peter drew Single Red. Moves from 0 to 1.
+[2025-04-11 11:06:03,002] INFO in app: Advanced turn. New current player: Theo
+[2025-04-11 11:06:03,003] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:03] "[32mPOST /draw HTTP/1.1[0m" 302 -
+[2025-04-11 11:06:03,018] DEBUG in app: Rendering game board for current state.
+[2025-04-11 11:06:03,024] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:03] "GET /game HTTP/1.1" 200 -
+[2025-04-11 11:06:03,082] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+[2025-04-11 11:06:09,401] DEBUG in app: Processing draw for current player: Theo
+[2025-04-11 11:06:09,403] INFO in app: Player Theo's turn.
+[2025-04-11 11:06:09,403] INFO in app: Theo drew: Single Yellow.
+[2025-04-11 11:06:09,404] INFO in app: Theo drew Single Yellow. Moves from 0 to 3.
+[2025-04-11 11:06:09,404] INFO in app: Advanced turn. New current player: Audrey
+[2025-04-11 11:06:09,405] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:09] "[32mPOST /draw HTTP/1.1[0m" 302 -
+[2025-04-11 11:06:09,417] DEBUG in app: Rendering game board for current state.
+[2025-04-11 11:06:09,431] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:09] "GET /game HTTP/1.1" 200 -
+[2025-04-11 11:06:09,467] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+[2025-04-11 11:06:12,348] DEBUG in app: Processing draw for current player: Audrey
+[2025-04-11 11:06:12,348] INFO in app: Player Audrey's turn.
+[2025-04-11 11:06:12,349] INFO in app: Audrey drew: Single Orange.
+[2025-04-11 11:06:12,349] INFO in app: Audrey drew Single Orange. Moves from 0 to 5.
+[2025-04-11 11:06:12,349] INFO in app: Advanced turn. New current player: Peter
+[2025-04-11 11:06:12,349] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:12] "[32mPOST /draw HTTP/1.1[0m" 302 -
+[2025-04-11 11:06:12,353] DEBUG in app: Rendering game board for current state.
+[2025-04-11 11:06:12,358] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:12] "GET /game HTTP/1.1" 200 -
+[2025-04-11 11:06:12,381] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+[2025-04-11 11:06:19,681] DEBUG in app: Processing draw for current player: Peter
+[2025-04-11 11:06:19,682] INFO in app: Player Peter's turn.
+[2025-04-11 11:06:19,682] INFO in app: Peter drew: Single Green.
+[2025-04-11 11:06:19,682] INFO in app: Peter drew Single Green. Moves from 1 to 6.
+[2025-04-11 11:06:19,682] INFO in app: Advanced turn. New current player: Theo
+[2025-04-11 11:06:19,683] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:19] "[32mPOST /draw HTTP/1.1[0m" 302 -
+[2025-04-11 11:06:19,686] DEBUG in app: Rendering game board for current state.
+[2025-04-11 11:06:19,689] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:19] "GET /game HTTP/1.1" 200 -
+[2025-04-11 11:06:19,719] INFO in _internal: 127.0.0.1 - - [11/Apr/2025 11:06:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
