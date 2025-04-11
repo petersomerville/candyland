@@ -17,6 +17,18 @@
           <div class="pawn" style="background-color: {{ p.pawn_color }};"></div>
         {% endif %}
       {% endfor %}
+  <h1>Peter's Candyland</h1>
+  
+  <h3>Board:</h3>
+  <div class="board">
+  {% for square in game.board.spaces %}
+    <div class="square" style="background-color: {{ square.color if square.color else '#ccc' }};">
+      {% if square.is_start %}START{% elif square.is_finish %}END{% elif square.is_picture %}{{ square.picture_name[0:3] }}{% else %}{{ square.index }}{% endif %}
+      {% for p in game.players %}
+        {% if p.position == square.index %}
+          <div class="pawn" style="background-color: {{ p.pawn_color }};"></div>
+        {% endif %}
+      {% endfor %}
     </div>
   {% endfor %}
   </div>
