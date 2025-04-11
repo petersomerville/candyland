@@ -4,7 +4,7 @@ import logging.config
 
 from flask import Flask, request, redirect, url_for, render_template, flash
 
-# Logging configuration as described in logging_config.md
+# Logging configuration: send logs to the console only.
 logging_config = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -19,15 +19,9 @@ logging_config = {
             'formatter': 'standard',
             'level': 'DEBUG',
         },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': 'app.log',
-            'formatter': 'standard',
-            'level': 'DEBUG',
-        },
     },
     'root': {
-        'handlers': ['console', 'file'],
+        'handlers': ['console'],
         'level': 'DEBUG',
     },
 }
