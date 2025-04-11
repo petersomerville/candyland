@@ -206,10 +206,6 @@ class Game:
 game = None
 
 # ---------- Flask Routes ----------
-<<<<<<< HEAD
-
-=======
->>>>>>> 73917a598fdd2d8fd9652ac53c6d0e0664805c62
 @app.route("/", methods=["GET"])
 def setup():
     return render_template("setup.html")
