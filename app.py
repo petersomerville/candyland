@@ -48,12 +48,12 @@ PICTURE_CARDS = [
 
 # Map picture names to image filenames
 PICTURE_IMAGES = {
-    "Peppermint Forest": "peppermint.png", # Example, add others as needed
+    "Peppermint Forest": "peppermint.png", 
     "Gumdrop Mountain": "gumdrop.png",
-    "Lollipop Woods": "lollipop.png",     # Example
-    "Ice Cream Sea": "ice-cream.png",      # Example
-    "Gingerbread Tree": "gingerbread.png",# Example
-    "Gloppy the Molasses Monster": "molasses.png" # Example
+    "Lollipop Woods": "lollipop.png",     
+    "Ice Cream Sea": "ice-cream.png",      
+    "Gingerbread Tree": "gingerbread.png",
+    "Gloppy the Molasses Monster": "molasses.png" 
 }
 
 class Square:
@@ -117,9 +117,18 @@ class Board:
         return board
 
 class Card:
-    def __init__(self, card_type, value):
+    def __init__(self, card_type, value, image_filename=None):
         self.card_type = card_type  # 'single', 'double', or 'picture'
         self.value = value
+        self.image_filename = image_filename
+
+    def __str__(self):
+        if self.card_type == 'picture':
+            return f"Picture: {self.value}"
+        elif self.card_type == 'double':
+            return f"Double {self.value}"
+        else:
+            return f"Single {self.value}"
 
     def __repr__(self):
         if self.card_type in ['single', 'double']:
@@ -131,6 +140,7 @@ class Card:
 
 class Deck:
     def __init__(self):
+        self.cards = []
         self.draw_pile = []
         self.discard_pile = []
         self.build_deck()
@@ -143,8 +153,11 @@ class Deck:
         for color in COLORS:
             for _ in range(2):
                 self.draw_pile.append(Card('double', color))
-        for pic in PICTURE_CARDS:
-            self.draw_pile.append(Card('picture', pic))
+        for picture_name in PICTURE_CARDS:
+            # Get the corresponding image filename from the dictionary
+            image_file = PICTURE_IMAGES.get(picture_name)
+            # Create the card WITH the image filename
+            self.draw_pile.append(Card('picture', picture_name, image_filename=image_file))
         # Total cards: 6*6 + 2*6 + 6 = 54
 
     def shuffle(self):
