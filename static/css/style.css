@@ -13,7 +13,7 @@ h1, h2, h3 {
   display: flex; /* Arrange squares in a row */
   flex-wrap: wrap; /* Allow squares to wrap to the next line */
   width: 80%; /* Adjust width as needed */
-  margin: 20px auto; /* Center the board */
+  margin: 10px auto; /* Center the board */
   padding: 15px;
   background-color: #fff; /* White background for the board area */
   border: 5px solid #8b4513; /* Brown border like a game board */
@@ -256,4 +256,22 @@ fieldset legend {
   padding: 5px;    /* Adds a little horizontal padding around the legend text */
   color: #333;       /* Sets the text color */
   background-color: #fff; /* White background for the fieldset */
+}
+
+/* Container for the two-column layout */
+.game-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Board (left column) */
+.game-board {
+    width: 80%;
+}
+
+/* Game info and controls (right column) */
+.game-info {
+    width: 20%;
+    box-sizing: border-box;
 }
