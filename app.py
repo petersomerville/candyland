@@ -1,6 +1,7 @@
 import random
 import logging
 import logging.config
+import os
 
 from flask import Flask, request, redirect, url_for, render_template, flash
 
@@ -45,10 +46,20 @@ PICTURE_CARDS = [
     "Gloppy the Molasses Monster"
 ]
 
+# Map picture names to image filenames
+PICTURE_IMAGES = {
+    "Peppermint Forest": "peppermint.png", # Example, add others as needed
+    "Gumdrop Mountain": "gumdrop.png",
+    "Lollipop Woods": "lollipop.png",     # Example
+    "Ice Cream Sea": "ice-cream.png",      # Example
+    "Gingerbread Tree": "gingerbread.png",# Example
+    "Gloppy the Molasses Monster": "molasses.png" # Example
+}
+
 class Square:
     def __init__(self, index, color=None, is_start=False, is_finish=False,
                  is_picture=False, picture_name=None, is_shortcut_start=False,
-                 shortcut_target=None, is_lose_turn=False):
+                 shortcut_target=None, is_lose_turn=False, image_filename=None):
         self.index = index
         self.color = color
         self.is_start = is_start
@@ -58,6 +69,7 @@ class Square:
         self.is_shortcut_start = is_shortcut_start
         self.shortcut_target = shortcut_target
         self.is_lose_turn = is_lose_turn
+        self.image_filename = image_filename
 
 class Board:
     def __init__(self):
@@ -88,8 +100,10 @@ class Board:
         }
         for pos, name in picture_positions.items():
             if pos < total_spaces:
+                image_file = PICTURE_IMAGES.get(name)
                 board[pos].is_picture = True
                 board[pos].picture_name = name
+                board[pos].image_filename = image_file
                 if name == "Gloppy the Molasses Monster":
                     board[pos].is_lose_turn = True
 
@@ -345,5 +359,11 @@ def reset():
     return redirect(url_for("setup"))
 
 if __name__ == '__main__':
+    # Ensure the static folder exists if it doesn't
+    if not os.path.exists('static/images'):
+         os.makedirs('static/images', exist_ok=True)
+         logger.info("Created static/images directory.")
+
     logger.info("Starting Candyland app.")
+    # Consider setting debug=False for production
     app.run(host='0.0.0.0', port=5000, debug=True)
