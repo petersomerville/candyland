@@ -7,101 +7,106 @@
 <body>
   <h1>Peter's Candyland</h1>
   
-  <div class="board">
-    {% for square in game.board.spaces %}
-      {% set square_classes = ['square'] %}
-      {% if square.is_start %}
-        {% set square_classes = square_classes + ['start-square'] %}
-      {% endif %}
-      {% if square.is_finish %}
-        {% set square_classes = square_classes + ['finish-square'] %}
-      {% endif %}
-      {% if square.is_picture and not square.image_filename %}
-          {# Optionally add any extra marker when no image is provided #}
-          {% set square_classes = square_classes + ['picture-square'] %}
-      {% endif %}
-      
-      {# The main div for the square #}
-      <div class="{{ square_classes|join(' ') }}" style="background-color: {% if square.color and not square.image_filename %}{{ square.color }}{% elif not square.image_filename %}#ccc{% else %}transparent{% endif %};">
-      
-        {# 1. Image layer (if exists) #}
-        {% if square.is_picture and square.image_filename %}
-          <img src="{{ url_for('static', filename='images/' + square.image_filename) }}"
-               alt="{{ square.picture_name }}"
-               class="square-image"
-               title="{{ square.picture_name }}">
-        {% endif %}
-      
-        {# 2. Content layer (text, icons, etc.) #}
-        <span class="square-content">
+  <!-- New container for two columns -->
+  <div class="game-container">
+  
+    <!-- Left column: Game Board -->
+    <div class="game-board">
+      <div class="board">
+        {% for square in game.board.spaces %}
+          {% set square_classes = ['square'] %}
           {% if square.is_start %}
-            START
-          {% elif square.is_finish %}
-            END
-          {% elif square.is_picture %}
-            {% if not square.image_filename %}
-              {{ square.picture_name[0:3] }}
-            {% endif %}
-          {% elif square.color %}
-            {{ square.index }}
-          {% else %}
-            {{ square.index }}
+            {% set square_classes = square_classes + ['start-square'] %}
           {% endif %}
-        </span>
-      
-        {# 3. Pawns layer #}
-        <div class="pawns-container">
-          {% for p in game.players %}
-            {% if p.position == square.index %}
-              <div class="pawn" title="{{ p.name }}" style="background-color: {% if p.pawn_color %}{{ p.pawn_color }}{% else %}#888{% endif %};">
-              </div>
+          {% if square.is_finish %}
+            {% set square_classes = square_classes + ['finish-square'] %}
+          {% endif %}
+          {% if square.is_picture and not square.image_filename %}
+            {% set square_classes = square_classes + ['picture-square'] %}
+          {% endif %}
+          
+          <div class="{{ square_classes|join(' ') }}" style="background-color: {% if square.color and not square.image_filename %}{{ square.color }}{% elif not square.image_filename %}#ccc{% else %}transparent{% endif %};">
+          
+            {% if square.is_picture and square.image_filename %}
+              <img src="{{ url_for('static', filename='images/' + square.image_filename) }}"
+                   alt="{{ square.picture_name }}"
+                   class="square-image"
+                   title="{{ square.picture_name }}">
             {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-  
-  {% if game.status == "Finished" %}
-    <h2>{{ game.winner.name }} Wins!</h2>
-    <form action="{{ url_for('reset') }}" method="post">
-      <input type="submit" value="Play Again">
-    </form>
-  {% else %}
-    <h3>Current Turn: {{ game.get_current_player().name }}</h3>
-    <form action="{{ url_for('draw') }}" method="post">
-      <input type="submit" value="Draw Card">
-    </form>
-  {% endif %}
-  
-  {# Display the last drawn card visually if it exists #}
-  {% if game.last_card %}
-    <div class="drawn-card-container">
-      <h3>Drawn Card:</h3>
-      <div class="drawn-card-visual">
-        {% if game.last_card.card_type == 'single' %}
-          <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
-          <span class="card-text-label">{{ game.last_card.value|title }}</span>
-        {% elif game.last_card.card_type == 'double' %}
-          <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
-          <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
-          <span class="card-text-label">Double {{ game.last_card.value|title }}</span>
-        {% elif game.last_card.card_type == 'picture' %}
-          <div class="card-picture">
-            {% if game.last_card.image_filename is defined %}
-              <img src="{{ url_for('static', filename='images/' + game.last_card.image_filename) }}"
-                   alt="{{ game.last_card.value }}"
-                   title="{{ game.last_card.value }}">
-            {% else %}
-              {# Fallback: Just show the name if no image file is associated #}
-              <span class="card-text-label">{{ game.last_card.value }}</span>
-            {% endif %}
+          
+            <span class="square-content">
+              {% if square.is_start %}
+                START
+              {% elif square.is_finish %}
+                END
+              {% elif square.is_picture %}
+                {% if not square.image_filename %}
+                  {{ square.picture_name[0:3] }}
+                {% endif %}
+              {% elif square.color %}
+                {{ square.index }}
+              {% else %}
+                {{ square.index }}
+              {% endif %}
+            </span>
+          
+            <div class="pawns-container">
+              {% for p in game.players %}
+                {% if p.position == square.index %}
+                  <div class="pawn" title="{{ p.name }}" style="background-color: {% if p.pawn_color %}{{ p.pawn_color }}{% else %}#888{% endif %};">
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
           </div>
-        {% endif %}
+        {% endfor %}
       </div>
     </div>
-  {% endif %}
+    
+    <!-- Right column: Controls -->
+    <div class="game-info">
+      {% if game.status == "Finished" %}
+        <h2>{{ game.winner.name }} Wins!</h2>
+        <form action="{{ url_for('reset') }}" method="post">
+          <input type="submit" value="Play Again">
+        </form>
+      {% else %}
+        <h3>Current Turn: {{ game.get_current_player().name }}</h3>
+        <form action="{{ url_for('draw') }}" method="post">
+          <input type="submit" value="Draw Card">
+        </form>
+      {% endif %}
+      
+      {% if game.last_card %}
+        <div class="drawn-card-container">
+          <h3>Drawn Card:</h3>
+          <div class="drawn-card-visual">
+            {% if game.last_card.card_type == 'single' %}
+              <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
+              <span class="card-text-label">{{ game.last_card.value|title }}</span>
+            {% elif game.last_card.card_type == 'double' %}
+              <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
+              <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
+              <span class="card-text-label">Double {{ game.last_card.value|title }}</span>
+            {% elif game.last_card.card_type == 'picture' %}
+              <div class="card-picture">
+                {% if game.last_card.image_filename is defined %}
+                  <img src="{{ url_for('static', filename='images/' + game.last_card.image_filename) }}"
+                       alt="{{ game.last_card.value }}"
+                       title="{{ game.last_card.value }}">
+                {% else %}
+                  <span class="card-text-label">{{ game.last_card.value }}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    
+  </div> <!-- end of .game-container -->
   
+  <!-- Full-width sections below -->
   <h3>Last 6 Moves:</h3>
   <ul>
     {% for msg in game.messages[-6:] %}
@@ -119,5 +124,6 @@
       </li>
     {% endfor %}
   </ul>
+  
 </body>
 </html>
