@@ -64,27 +64,31 @@
         <label for="num_players_3">3</label><br>
         <input type="radio" name="num_players" value="4" id="num_players_4">
         <label for="num_players_4">4</label><br>
-    </fieldset>
+        <br>
 
-    <div id="player1_div">
-      <label for="player1_name">Player 1 Name:</label> {# Use 'for' attribute #}
-      <input type="text" name="player1" id="player1_name" required><br>
-    </div>
-    <div id="player2_div">
-      <label for="player2_name">Player 2 Name:</label>
-      <input type="text" name="player2" id="player2_name" required><br>
-    </div>
-    <div id="player3_div" style="display:none;">
-      <label for="player3_name">Player 3 Name:</label>
-      <input type="text" name="player3" id="player3_name"><br> {# Required handled by JS #}
-    </div>
-    <div id="player4_div" style="display:none;">
-      <label for="player4_name">Player 4 Name:</label>
-      <input type="text" name="player4" id="player4_name"><br> {# Required handled by JS #}
-    </div><br>
+      <div id="player1_div">
+        <label for="player1_name">Player 1 Name:</label> {# Use 'for' attribute #}
+        <input type="text" name="player1" id="player1_name" required><br>
+      </div>
+      <div id="player2_div">
+        <label for="player2_name">Player 2 Name:</label>
+        <input type="text" name="player2" id="player2_name" required><br>
+      </div>
+      <div id="player3_div" style="display:none;">
+        <label for="player3_name">Player 3 Name:</label>
+        <input type="text" name="player3" id="player3_name"><br> {# Required handled by JS #}
+      </div>
+      <div id="player4_div" style="display:none;">
+        <label for="player4_name">Player 4 Name:</label>
+        <input type="text" name="player4" id="player4_name"><br> {# Required handled by JS #}
+      </div><br>
+    </fieldset>
+    <br>
 
     {# Add a class to the button if you have button styles #}
     <input type="submit" value="Start Game" class="button start-button">
+
+
     <img src="{{ url_for('static', filename='images/arithmetic-candyland.jpeg') }}"
     alt="Candyland game board setup image"
     class="setup-image">
