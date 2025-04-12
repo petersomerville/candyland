@@ -2,40 +2,92 @@
 <html>
 <head>
   <title>Candyland Setup</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <script>
     function updatePlayerFields() {
       var numPlayers = document.querySelector('input[name="num_players"]:checked').value;
       for (var i = 1; i <= 4; i++) {
-        document.getElementById('player' + i + '_div').style.display = (i <= numPlayers) ? 'block' : 'none';
+        // Make sure the div exists before trying to access its style
+        var playerDiv = document.getElementById('player' + i + '_div');
+        if (playerDiv) {
+            playerDiv.style.display = (i <= numPlayers) ? 'block' : 'none';
+        }
+      }
+      // Also ensure required attribute is handled correctly
+      for (var i = 3; i <= 4; i++) {
+          var playerInput = document.querySelector('input[name="player' + i + '"]');
+          if (playerInput) {
+              playerInput.required = (i <= numPlayers);
+          }
       }
     }
-    window.onload = updatePlayerFields;
+    // It's generally better to use DOMContentLoaded or attach event listeners
+    // after the DOM is ready, rather than window.onload.
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initial call to set the correct state based on default checked radio (if any)
+        var checkedRadio = document.querySelector('input[name="num_players"]:checked');
+        if (checkedRadio) {
+            updatePlayerFields();
+        } else {
+            // If no radio is checked by default, maybe default to 2 players visible?
+            // Or ensure one is checked in the HTML (e.g., add 'checked' to value="2")
+             document.getElementById('player1_div').style.display = 'block';
+             document.getElementById('player2_div').style.display = 'block';
+             document.getElementById('player3_div').style.display = 'none';
+             document.getElementById('player4_div').style.display = 'none';
+             // Ensure player 1 and 2 inputs are required initially if no default checked
+             var p1Input = document.querySelector('input[name="player1"]');
+             var p2Input = document.querySelector('input[name="player2"]');
+             if(p1Input) p1Input.required = true;
+             if(p2Input) p2Input.required = true;
+        }
+
+        // Add event listeners to radio buttons
+        var radios = document.querySelectorAll('input[name="num_players"]');
+        radios.forEach(function(radio) {
+            radio.addEventListener('change', updatePlayerFields);
+        });
+    });
+    // Remove the old window.onload = updatePlayerFields;
   </script>
 </head>
 <body>
   <h1>Welcome to Peter's Candyland!</h1>
-  <form action="{{ url_for('start') }}" method="post">
-    <label>Select Number of Players:</label><br>
-    <input type="radio" name="num_players" value="2" required onchange="updatePlayerFields()">2<br>
-    <input type="radio" name="num_players" value="3" onchange="updatePlayerFields()">3<br>
-    <input type="radio" name="num_players" value="4" onchange="updatePlayerFields()">4<br><br>
+  {# Consider adding a class to the form for styling #}
+  <form action="{{ url_for('start') }}" method="post" class="setup-form">
+    <fieldset> {# Grouping related form elements is good practice #}
+        <legend>Select Number of Players:</legend>
+        {# Using labels FOR inputs improves accessibility #}
+        <input type="radio" name="num_players" value="2" id="num_players_2" required>
+        <label for="num_players_2">2</label><br>
+        <input type="radio" name="num_players" value="3" id="num_players_3">
+        <label for="num_players_3">3</label><br>
+        <input type="radio" name="num_players" value="4" id="num_players_4">
+        <label for="num_players_4">4</label><br>
+    </fieldset>
+
     <div id="player1_div">
-      <label>Player 1 Name:</label>
-      <input type="text" name="player1" required><br>
+      <label for="player1_name">Player 1 Name:</label> {# Use 'for' attribute #}
+      <input type="text" name="player1" id="player1_name" required><br>
     </div>
     <div id="player2_div">
-      <label>Player 2 Name:</label>
-      <input type="text" name="player2" required><br>
+      <label for="player2_name">Player 2 Name:</label>
+      <input type="text" name="player2" id="player2_name" required><br>
     </div>
     <div id="player3_div" style="display:none;">
-      <label>Player 3 Name:</label>
-      <input type="text" name="player3"><br>
+      <label for="player3_name">Player 3 Name:</label>
+      <input type="text" name="player3" id="player3_name"><br> {# Required handled by JS #}
     </div>
     <div id="player4_div" style="display:none;">
-      <label>Player 4 Name:</label>
-      <input type="text" name="player4"><br>
+      <label for="player4_name">Player 4 Name:</label>
+      <input type="text" name="player4" id="player4_name"><br> {# Required handled by JS #}
     </div><br>
-    <input type="submit" value="Start Game">
+
+    {# Add a class to the button if you have button styles #}
+    <input type="submit" value="Start Game" class="button start-button">
+    <img src="{{ url_for('static', filename='images/arithmetic-candyland.jpeg') }}"
+    alt="Candyland game board setup image"
+    class="setup-image">
   </form>
 </body>
 </html>
