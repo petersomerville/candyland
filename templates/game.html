@@ -39,7 +39,9 @@
           {% elif square.is_finish %}
             END
           {% elif square.is_picture %}
-            {{ square.picture_name[0:3] }}
+            {% if not square.image_filename %}
+              {{ square.picture_name[0:3] }}
+            {% endif %}
           {% elif square.color %}
             {{ square.index }}
           {% else %}
@@ -86,7 +88,14 @@
           <span class="card-text-label">Double {{ game.last_card.value|title }}</span>
         {% elif game.last_card.card_type == 'picture' %}
           <div class="card-picture">
-            <span>{{ game.last_card.value }}</span>
+            {% if game.last_card.image_filename is defined %}
+              <img src="{{ url_for('static', filename='images/' + game.last_card.image_filename) }}"
+                   alt="{{ game.last_card.value }}"
+                   title="{{ game.last_card.value }}">
+            {% else %}
+              {# Fallback: Just show the name if no image file is associated #}
+              <span class="card-text-label">{{ game.last_card.value }}</span>
+            {% endif %}
           </div>
         {% endif %}
       </div>
