@@ -16,28 +16,46 @@
       {% if square.is_finish %}
         {% set square_classes = square_classes + ['finish-square'] %}
       {% endif %}
-      {% if square.is_picture %}
-        {% set square_classes = square_classes + ['picture-square', 'picture-' + square.picture_name|lower|replace(' ', '-')] %}
+      {% if square.is_picture and not square.image_filename %}
+          {# Optionally add any extra marker when no image is provided #}
+          {% set square_classes = square_classes + ['picture-square'] %}
       {% endif %}
-      <div class="{{ square_classes|join(' ') }}" style="background-color: {% if square.color %}{{ square.color }}{% else %}#ccc{% endif %};">
-        {% if square.is_start %}
-          START
-        {% elif square.is_finish %}
-          END
-        {% elif square.is_picture %}
-          {{ square.picture_name[0:3] }}
-        {% else %}
-          {{ square.index }}
+      
+      {# The main div for the square #}
+      <div class="{{ square_classes|join(' ') }}" style="background-color: {% if square.color and not square.image_filename %}{{ square.color }}{% elif not square.image_filename %}#ccc{% else %}transparent{% endif %};">
+      
+        {# 1. Image layer (if exists) #}
+        {% if square.is_picture and square.image_filename %}
+          <img src="{{ url_for('static', filename='images/' + square.image_filename) }}"
+               alt="{{ square.picture_name }}"
+               class="square-image"
+               title="{{ square.picture_name }}">
         {% endif %}
-        {% set pawn_count = 0 %}
-        {% for p in game.players %}
-          {% if p.position == square.index %}
-            {% set pawn_count = pawn_count + 1 %}
-            <div class="pawn" title="{{ p.name }}" style="background-color: {% if p.pawn_color %}{{ p.pawn_color }}{% else %}#888{% endif %};">
-              {# Optionally add player initial inside pawn #}
-            </div>
+      
+        {# 2. Content layer (text, icons, etc.) #}
+        <span class="square-content">
+          {% if square.is_start %}
+            START
+          {% elif square.is_finish %}
+            END
+          {% elif square.is_picture %}
+            {{ square.picture_name[0:3] }}
+          {% elif square.color %}
+            {{ square.index }}
+          {% else %}
+            {{ square.index }}
           {% endif %}
-        {% endfor %}
+        </span>
+      
+        {# 3. Pawns layer #}
+        <div class="pawns-container">
+          {% for p in game.players %}
+            {% if p.position == square.index %}
+              <div class="pawn" title="{{ p.name }}" style="background-color: {% if p.pawn_color %}{{ p.pawn_color }}{% else %}#888{% endif %};">
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     {% endfor %}
   </div>
@@ -60,28 +78,20 @@
       <h3>Drawn Card:</h3>
       <div class="drawn-card-visual">
         {% if game.last_card.card_type == 'single' %}
-          {# Display one colored square #}
           <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
-          <span class="card-text-label">{{ game.last_card.value|title }}</span> {# Optional text label #}
-
+          <span class="card-text-label">{{ game.last_card.value|title }}</span>
         {% elif game.last_card.card_type == 'double' %}
-          {# Display two colored squares #}
           <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
           <div class="card-square" style="background-color: {{ game.last_card.value }};"></div>
-           <span class="card-text-label">Double {{ game.last_card.value|title }}</span> {# Optional text label #}
-
+          <span class="card-text-label">Double {{ game.last_card.value|title }}</span>
         {% elif game.last_card.card_type == 'picture' %}
-          {# Display picture name (or image later) #}
           <div class="card-picture">
-            {# You could eventually replace this text with an <img> tag #}
-            {# <img src="{{ url_for('static', filename='images/' + game.last_card.value|lower|replace(' ', '_') + '.png') }}" alt="{{ game.last_card.value }}"> #}
             <span>{{ game.last_card.value }}</span>
           </div>
         {% endif %}
       </div>
     </div>
   {% endif %}
-
   
   <h3>Last 6 Moves:</h3>
   <ul>

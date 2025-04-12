@@ -32,6 +32,7 @@ h1, h2, h3 {
   font-size: 10px;
   font-weight: bold;
   position: relative; /* Needed for absolute positioning of pawns */
+  overflow: hidden; /* Hide overflow */
   color: rgba(0, 0, 0, 0.7); /* Slightly transparent text */
   box-sizing: border-box; /* Include padding and border in total width/height */
   border-radius: 5px; /* Slightly rounded corners */
@@ -41,6 +42,43 @@ h1, h2, h3 {
   font-weight: bold;
   font-size: 12px;
   color: #555;
+}
+
+.square-image {
+  /* Styles for the image itself */
+  position: absolute; /* Position relative to the .square */
+  top: 0;
+  left: 0;
+  width: 100%;       /* Make image fill the square width */
+  height: 100%;      /* Make image fill the square height */
+  object-fit: cover; /* Cover the square area, cropping if needed. Use 'contain' to fit the whole image. */
+  z-index: 1;        /* Image layer (lowest) */
+}
+
+.square-content {
+  /* Styles for text/icons layered ON TOP of the image */
+  position: relative; /* Needed to stack above the absolute positioned image */
+  z-index: 2;        /* Content layer (above image) */
+  display: inline-block; /* Or block, depending on desired layout */
+  padding: 2px 4px; /* Example padding */
+  background-color: rgba(255, 255, 255, 0.6); /* Optional: semi-transparent background for readability */
+  border-radius: 3px;
+  font-size: 10px; /* Adjust as needed */
+  line-height: normal; /* Reset line-height if needed */
+  color: #333; /* Ensure text color is visible */
+  /* Add text-align, vertical-align, etc. if needed */
+  text-align: center;
+}
+
+.pawns-container {
+    /* Container for pawns, ensures they are layered correctly */
+    position: relative; /* Keeps pawns in flow but allows z-index */
+    z-index: 3; /* Pawns layer (highest) */
+    /* You might need to adjust pawn positioning if you use this container */
+    /* For example, remove absolute positioning from .pawn */
+    /* and use flexbox/grid here if multiple pawns need layout */
+    text-align: center; /* Center pawns if using inline-block */
+    line-height: 0; /* Prevent container from taking extra vertical space */
 }
 
 .pawn {
