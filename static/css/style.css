@@ -242,3 +242,18 @@ li {
     border: black 1px solid;
     border-radius: 20px;
   }
+
+  /* Styling for the fieldset on the setup page */
+fieldset {
+  border: 1px solid #ccc; 
+  border-radius: 20px;   
+  padding: 15px;       
+  margin-bottom: 20px;   
+}
+
+fieldset legend {
+  font-weight: bold; /* Makes the legend text bold */
+  padding: 5px;    /* Adds a little horizontal padding around the legend text */
+  color: #333;       /* Sets the text color */
+  background-color: #fff; /* White background for the fieldset */
+}
