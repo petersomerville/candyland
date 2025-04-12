@@ -39,7 +39,9 @@
           {% elif square.is_finish %}
             END
           {% elif square.is_picture %}
-            {{ square.picture_name[0:3] }}
+            {% if not square.image_filename %}
+              {{ square.picture_name[0:3] }}
+            {% endif %}
           {% elif square.color %}
             {{ square.index }}
           {% else %}
