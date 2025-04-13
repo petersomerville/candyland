@@ -4,6 +4,10 @@ body {
   color: #333;
 }
 
+.header-image {
+  width: 25%;
+}
+
 h1, h2, h3 {
   color: #ff69b4; /* Hot pink titles */
   text-align: center;
