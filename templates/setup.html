@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<body>
+
   <title>Candyland Setup</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <script>
@@ -52,7 +54,10 @@
   </script>
 </head>
 <body>
-  <h1>Welcome to Peter's Candyland!</h1>
+  <div style="text-align: center;">
+    <img src="static/images/colorful-candyland-header.png" alt="Candyland Header" class="header-image">
+</div>
+  <!-- <h1>Welcome to Peter's Candyland!</h1> -->
   {# Consider adding a class to the form for styling #}
   <form action="{{ url_for('start') }}" method="post" class="setup-form">
     <fieldset> {# Grouping related form elements is good practice #}
