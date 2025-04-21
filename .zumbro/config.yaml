@@ -1,0 +1,52 @@
+#
+#  _____               _               
+# |__  /   _ _ __ ___ | |__  _ __ ___  
+#   / / | | | '_ ` _ \| '_ \| '__/ _ \ 
+#  / /| |_| | | | | | | |_) | | | (_) |
+# /____\__,_|_| |_| |_|_.__/|_|  \___/ 
+#
+#
+
+# Programming Language
+# This tells Zumbro which language you
+# want to check for code quality tools
+# Zumbro currently supports: python 
+language: python
+
+# pre-commit
+# https://pre-commit.com/
+# A framework for managing and maintaining multi-language pre-commit hooks.
+# For Zumbro to work, you must have enable_precommit set to true.
+enable_precommit: true
+
+# isort
+# https://pycqa.github.io/isort/
+# isort your imports, so that you don't have to
+enable_isort: true
+
+# black
+# https://github.com/psf/black
+# The uncompromising Python code formatter
+enable_black: true
+
+# ruff
+# https://github.com/astral-sh/ruff
+# An extremely fast Python linter and code formatter, written in Rust.
+enable_ruff: true
+
+# HOW TO USE THIS CONFIGURATION FILE
+
+# 1. Copy this file to the root of your repository as .zumbro/config.yaml
+# 2. Enable pre-commit above; Zumbro enforces engineering standards
+#    on new commits with pre-commit.
+# 3. Enable your preferred tools above.
+#    Zumbro currently supports: isort, black, ruff.
+# 4. Add this Zumbro config file via pull request; 
+#   Do not merge directly to main.
+
+# We want to hear your feedback on which features to prioritize.
+# Potential options: other linters, other languages, other CI tools.
+
+# Any questions or roadblocks? Email us at support@caparra.ai. 
+# Our goal is to make Zumbro the most valuable app in your tech stack.
+         
