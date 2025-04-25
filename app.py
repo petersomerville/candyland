@@ -1,29 +1,29 @@
-import random
 import logging
 import logging.config
 import os
+import random
 
-from flask import Flask, request, redirect, url_for, render_template, flash
+from flask import Flask, flash, redirect, render_template, request, url_for
 
 # Logging configuration: send logs to the console only.
 logging_config = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'standard': {
-            'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {
+            "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s"
         },
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-            'level': 'DEBUG',
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+            "level": "DEBUG",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
     },
 }
 
@@ -32,34 +32,45 @@ logger = logging.getLogger(__name__)
 logger.debug("Logging configuration loaded.")
 
 app = Flask(__name__)
-app.secret_key = 'candyland-secret-key'  # for flash messages
+app.secret_key = "candyland-secret-key"  # for flash messages
 
 # ---------- Game Models and Logic ----------
 
-COLORS = ['red', 'purple', 'yellow', 'blue', 'orange', 'green']
+COLORS = ["red", "purple", "yellow", "blue", "orange", "green"]
 PICTURE_CARDS = [
     "Peppermint Forest",
     "Gumdrop Mountain",
     "Lollipop Woods",
     "Ice Cream Sea",
     "Gingerbread Tree",
-    "Gloppy the Molasses Monster"
+    "Gloppy the Molasses Monster",
 ]
 
 # Map picture names to image filenames
 PICTURE_IMAGES = {
-    "Peppermint Forest": "peppermint.png", 
+    "Peppermint Forest": "peppermint.png",
     "Gumdrop Mountain": "gumdrop.png",
-    "Lollipop Woods": "lollipop.png",     
-    "Ice Cream Sea": "ice-cream.png",      
+    "Lollipop Woods": "lollipop.png",
+    "Ice Cream Sea": "ice-cream.png",
     "Gingerbread Tree": "gingerbread.png",
-    "Gloppy the Molasses Monster": "molasses.png" 
+    "Gloppy the Molasses Monster": "molasses.png",
 }
 
+
 class Square:
-    def __init__(self, index, color=None, is_start=False, is_finish=False,
-                 is_picture=False, picture_name=None, is_shortcut_start=False,
-                 shortcut_target=None, is_lose_turn=False, image_filename=None):
+    def __init__(
+        self,
+        index,
+        color=None,
+        is_start=False,
+        is_finish=False,
+        is_picture=False,
+        picture_name=None,
+        is_shortcut_start=False,
+        shortcut_target=None,
+        is_lose_turn=False,
+        image_filename=None,
+    ):
         self.index = index
         self.color = color
         self.is_start = is_start
@@ -70,6 +81,7 @@ class Square:
         self.shortcut_target = shortcut_target
         self.is_lose_turn = is_lose_turn
         self.image_filename = image_filename
+
 
 class Board:
     def __init__(self):
@@ -86,7 +98,7 @@ class Board:
             elif i == total_spaces - 1:
                 board.append(Square(i, color="red", is_finish=True))
             else:
-                color = COLORS[(i-1) % len(COLORS)]
+                color = COLORS[(i - 1) % len(COLORS)]
                 board.append(Square(i, color=color))
 
         # Mark picture spaces at fixed indices:
@@ -96,7 +108,7 @@ class Board:
             60: "Lollipop Woods",
             90: "Ice Cream Sea",
             110: "Gingerbread Tree",
-            120: "Gloppy the Molasses Monster"  # Also the lose-turn square
+            120: "Gloppy the Molasses Monster",  # Also the lose-turn square
         }
         for pos, name in picture_positions.items():
             if pos < total_spaces:
@@ -116,6 +128,7 @@ class Board:
 
         return board
 
+
 class Card:
     def __init__(self, card_type, value, image_filename=None):
         self.card_type = card_type  # 'single', 'double', or 'picture'
@@ -123,20 +136,21 @@ class Card:
         self.image_filename = image_filename
 
     def __str__(self):
-        if self.card_type == 'picture':
+        if self.card_type == "picture":
             return f"Picture: {self.value}"
-        elif self.card_type == 'double':
+        elif self.card_type == "double":
             return f"Double {self.value}"
         else:
             return f"Single {self.value}"
 
     def __repr__(self):
-        if self.card_type in ['single', 'double']:
+        if self.card_type in ["single", "double"]:
             # Use title case for better readability
             return f"{self.card_type.title()} {self.value.title()}"
         else:
             # Keep picture names as they are
             return f"Picture: {self.value}"
+
 
 class Deck:
     def __init__(self):
@@ -149,15 +163,17 @@ class Deck:
     def build_deck(self):
         for color in COLORS:
             for _ in range(6):
-                self.draw_pile.append(Card('single', color))
+                self.draw_pile.append(Card("single", color))
         for color in COLORS:
             for _ in range(2):
-                self.draw_pile.append(Card('double', color))
+                self.draw_pile.append(Card("double", color))
         for picture_name in PICTURE_CARDS:
             # Get the corresponding image filename from the dictionary
             image_file = PICTURE_IMAGES.get(picture_name)
             # Create the card WITH the image filename
-            self.draw_pile.append(Card('picture', picture_name, image_filename=image_file))
+            self.draw_pile.append(
+                Card("picture", picture_name, image_filename=image_file)
+            )
         # Total cards: 6*6 + 2*6 + 6 = 54
 
     def shuffle(self):
@@ -172,6 +188,7 @@ class Deck:
         self.discard_pile.append(card)
         return card
 
+
 class Player:
     def __init__(self, pid, pawn_color, name):
         self.pid = pid
@@ -179,6 +196,7 @@ class Player:
         self.name = name
         self.position = 0
         self.skip_turn = False
+
 
 class Game:
     def __init__(self, num_players, names):
@@ -196,11 +214,11 @@ class Game:
         logger.debug("Game initialized: %s", self)
 
     def init_players(self, num_players, names):
-        pawn_colors = ['#FF0000', '#0000FF', '#FFFF00', '#008000', '#FFA500', '#800080']
+        pawn_colors = ["#FF0000", "#0000FF", "#FFFF00", "#008000", "#FFA500", "#800080"]
         for i in range(num_players):
             pawn_color = pawn_colors[i % len(pawn_colors)]
             name = names[i] if i < len(names) and names[i] else f"Player {i+1}"
-            self.players.append(Player(i+1, pawn_color, name))
+            self.players.append(Player(i + 1, pawn_color, name))
             logger.debug("Player added: %s with color %s", name, pawn_color)
 
     def get_current_player(self):
@@ -209,17 +227,28 @@ class Game:
     def advance_turn(self):
         next_player_index = (self.current_player_index + 1) % len(self.players)
         while self.players[next_player_index].skip_turn:
-            self.messages.append(f"Player {self.players[next_player_index].name} loses a turn.")
+            self.messages.append(
+                f"Player {self.players[next_player_index].name} loses a turn."
+            )
             logger.info("Player %s loses a turn.", self.players[next_player_index].name)
             self.players[next_player_index].skip_turn = False  # Reset skip flag
             next_player_index = (next_player_index + 1) % len(self.players)
-            if next_player_index == self.current_player_index and self.players[next_player_index].skip_turn:
-                self.messages.append("All players skipping turn? Resetting skip for current player.")
-                logger.warning("All players skipping turn; resetting skip for %s", 
-                               self.players[next_player_index].name)
+            if (
+                next_player_index == self.current_player_index
+                and self.players[next_player_index].skip_turn
+            ):
+                self.messages.append(
+                    "All players skipping turn? Resetting skip for current player."
+                )
+                logger.warning(
+                    "All players skipping turn; resetting skip for %s",
+                    self.players[next_player_index].name,
+                )
                 self.players[next_player_index].skip_turn = False
         self.current_player_index = next_player_index
-        logger.info("Advanced turn. New current player: %s", self.get_current_player().name)
+        logger.info(
+            "Advanced turn. New current player: %s", self.get_current_player().name
+        )
 
     def move_player(self, player, card):
         orig_position = player.position
@@ -227,8 +256,8 @@ class Game:
         board = self.board.spaces
         found_target = False
 
-        if card.card_type in ['single', 'double']:
-            needed = 1 if card.card_type == 'single' else 2
+        if card.card_type in ["single", "double"]:
+            needed = 1 if card.card_type == "single" else 2
             found = 0
             for pos in range(orig_position + 1, len(board)):
                 if not board[pos].is_finish and board[pos].color == card.value:
@@ -241,7 +270,7 @@ class Game:
                 new_position = board[-1].index
                 found_target = True
 
-        elif card.card_type == 'picture':
+        elif card.card_type == "picture":
             for pos in range(len(board)):
                 if board[pos].is_picture and board[pos].picture_name == card.value:
                     new_position = pos
@@ -303,9 +332,11 @@ class Game:
 
         return card
 
+
 # ---------- Global Game Instance ----------
 
 game = None
+
 
 # ---------- Flask Routes ----------
 @app.route("/", methods=["GET"])
@@ -314,6 +345,7 @@ def setup():
     global game
     game = None
     return render_template("setup.html")
+
 
 @app.route("/start", methods=["POST"])
 def start():
@@ -339,6 +371,7 @@ def start():
     logger.info("Game started with players: %s", names)
     return redirect(url_for("game_route"))
 
+
 @app.route("/game", methods=["GET"])
 def game_route():
     if game is None:
@@ -348,20 +381,26 @@ def game_route():
     logger.debug("Rendering game board for current state.")
     return render_template("game.html", game=game)
 
+
 @app.route("/draw", methods=["POST"])
 def draw():
     global game
     if game is None:
-        logger.warning("Draw route accessed without an active game; redirecting to setup.")
+        logger.warning(
+            "Draw route accessed without an active game; redirecting to setup."
+        )
         return redirect(url_for("setup"))
     if game.status == "Finished":
         flash("The game has already finished!", "info")
         logger.info("Draw attempted after game finished.")
         return redirect(url_for("game_route"))
 
-    logger.debug("Processing draw for current player: %s", game.get_current_player().name)
+    logger.debug(
+        "Processing draw for current player: %s", game.get_current_player().name
+    )
     game.play_turn()
     return redirect(url_for("game_route"))
+
 
 @app.route("/reset", methods=["POST"])
 def reset():
@@ -371,12 +410,13 @@ def reset():
     logger.info("Game has been reset via /reset route.")
     return redirect(url_for("setup"))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Ensure the static folder exists if it doesn't
-    if not os.path.exists('static/images'):
-         os.makedirs('static/images', exist_ok=True)
-         logger.info("Created static/images directory.")
+    if not os.path.exists("static/images"):
+        os.makedirs("static/images", exist_ok=True)
+        logger.info("Created static/images directory.")
 
     logger.info("Starting Candyland app.")
     # Consider setting debug=False for production
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
