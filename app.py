@@ -313,7 +313,7 @@ def setup():
     logger.debug("Setup route accessed, resetting game.")
     global game
     game = None
-    return render_template("setup.html")
+    return render_template("index.html", template_folder=".")
 
 @app.route("/start", methods=["POST"])
 def start():
@@ -346,7 +346,7 @@ def game_route():
         logger.info("Game route accessed without a game; redirecting to setup.")
         return redirect(url_for("setup"))
     logger.debug("Rendering game board for current state.")
-    return render_template("game.html", game=game)
+    return render_template("game.html", game=game, template_folder=".")
 
 @app.route("/draw", methods=["POST"])
 def draw():
