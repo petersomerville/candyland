@@ -313,7 +313,7 @@ def setup():
     logger.debug("Setup route accessed, resetting game.")
     global game
     game = None
-    return render_template("setup.html")
+    return render_template("index.html")
 
 @app.route("/start", methods=["POST"])
 def start():
