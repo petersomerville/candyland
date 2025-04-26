@@ -10,9 +10,8 @@ Candyland is a web-based board game implemented using Flask. Players navigate th
 candyland
 ├── app.py                # Main application file for the Flask app
 ├── requirements.txt      # Lists dependencies required for the project
-├── templates             # Contains HTML templates for the application
-│   ├── index.html       # HTML template for the game setup page
-│   └── game.html        # HTML template for the main game page
+├── index.html           # HTML template for the game setup page
+├── game.html            # HTML template for the main game page
 ├── static                # Contains static files like CSS
 │   └── css
 │       └── style.css     # CSS styles for the application
