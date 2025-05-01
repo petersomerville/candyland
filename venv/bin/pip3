@@ -1,4 +1,4 @@
-#!/Users/pesomerville/Desktop/candyland/venv/bin/python3.13
+#!/Users/pesomerville/candyland/venv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys
