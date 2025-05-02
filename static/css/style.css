@@ -26,8 +26,8 @@ h1, h2, h3 {
 }
 
 .square {
-  width: 60px; /* Adjust size */
-  height: 60px; /* Adjust size */
+  width: 60px;
+  height: 60px;
   border: 2px solid #eee; /* Lighter border for squares */
   margin: 3px;
   display: flex; /* Use flexbox to center content */
@@ -116,9 +116,15 @@ h1, h2, h3 {
 }
 
 .finish-square {
+  width: 200px;
+  height: 120px;
   font-size: 14px;
   font-weight: bold;
   background-color: #ffd700 !important; /* Gold */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* UI Elements */

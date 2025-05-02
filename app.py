@@ -54,6 +54,7 @@ PICTURE_IMAGES = {
     "Ice Cream Sea": "ice-cream.png",
     "Gingerbread Tree": "gingerbread.png",
     "Gloppy the Molasses Monster": "molasses.png",
+    "Candy Castle": "final-castle.jpg",  # Add this line
 }
 
 
@@ -96,7 +97,15 @@ class Board:
             if i == 0:
                 board.append(Square(i, color=None, is_start=True))
             elif i == total_spaces - 1:
-                board.append(Square(i, color="red", is_finish=True))
+                # Assign finish square image and name
+                board.append(Square(
+                    i,
+                    color="red",
+                    is_finish=True,
+                    is_picture=True,
+                    picture_name="Candy Castle",
+                    image_filename=PICTURE_IMAGES.get("Candy Castle"),
+                ))
             else:
                 color = COLORS[(i - 1) % len(COLORS)]
                 board.append(Square(i, color=color))
