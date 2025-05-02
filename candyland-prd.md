@@ -1,25 +1,23 @@
 # Product Requirements Document: Web-Based Candyland Game (AI Implementation)
 
-**Document Version:** 1.0
-**Date Created:** 2023-10-27
-**Last Updated:** 2023-10-27
-**Author(s):** [Your Name/AI & Human Collaboration]
+**Document Version:** 1.3
+**Date Created:** 2025-04-04
+**Last Updated:** 2025-05-02
+**Author(s):** Peter Somerville
 **Target Audience:** AI Code Generation Agent (Python Focus)
 **Status:** Draft
-
----
 
 ## 1. Overview / Purpose
 
 **1.1. Product Summary:**
-This document outlines the requirements for developing a digital, web-based version of the classic children's board game, Candyland. The game should be playable within a standard desktop web browser using keyboard and mouse input. It must support 2, 3, or 4 players playing locally ("hotseat" mode) on the same computer. The implementation must faithfully replicate all core rules, mechanics, and components of the standard Candyland board game.
+This document outlines the requirements for a digital, web-based version of the board game, Candyland. The game should be playable within a standard desktop web browser using keyboard and mouse input. It must support 2, 3, or 4 players playing locally ("hotseat" mode) on the same computer. The implementation must replicate all core rules, mechanics, and components of the standard Candyland board game.
 
 **1.2. Business Context:**
-The goal is to create an accessible, engaging, and nostalgic digital experience. This product serves as a technical demonstration of replicating board game logic in a web environment using Python, potentially acting as a foundation for future digital board game projects or as a portfolio piece. It taps into the familiarity and enduring appeal of Candyland.
+The goal is to create an accessible and engaging digital experience. This product serves as a demonstration of board game logic in a web environment using Python, potentially acting as a portfolio piece.
 
 **1.3. Goals:**
 
-- **G1: Functional Equivalence:** Replicate the complete gameplay experience of the physical Candyland board game accurately.
+- **G1: Functional Equivalence:** Replicate the gameplay experience of the physical Candyland board game accurately.
 - **G2: User Experience:** Provide a clear, intuitive, and visually appealing interface for players on a desktop browser.
 - **G3: Technical Implementation:** Deliver a robust, well-structured Python application suitable for web deployment.
 - **G4: Player Support:** Enable 2, 3, or 4 players to participate in a single game session locally.
