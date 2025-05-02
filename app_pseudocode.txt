@@ -1,0 +1,62 @@
+// Import necessary modules (logging, os, random, flask)
+
+// Configure logging to output to console
+
+// Initialize Flask app with a secret key
+
+// ---------- Game Models and Logic ----------
+
+// Define COLORS and PICTURE_CARDS lists
+// Define PICTURE_IMAGES mapping picture names to image filenames
+
+// Square class:
+//   - Represents a board square with properties: index, color, start/finish flags, picture info, shortcut info, lose turn, image
+
+// Board class:
+//   - Initializes a list of Square objects (total 134)
+//   - Assigns colors in repeating order, marks start/finish
+//   - Marks specific squares as picture spaces with images
+//   - Adds a shortcut from one square to another
+
+// Card class:
+//   - Represents a card: type (single/double/picture), value, image
+//   - String representation for display
+
+// Deck class:
+//   - Builds a deck with single/double color cards and picture cards
+//   - Shuffles deck
+//   - Draws a card, reshuffles if empty
+
+// Player class:
+//   - Represents a player: id, pawn color, name, position, skip_turn flag
+
+// Game class:
+//   - Initializes with number of players and their names
+//   - Creates board, deck, player list, sets current player, winner, messages
+//   - Handles player turns, drawing cards, moving players, checking for win
+//   - Handles skipping turns, shortcuts, lose-turn squares
+
+//   Methods:
+//     - init_players: assigns pawn colors and names
+//     - get_current_player: returns player whose turn it is
+//     - advance_turn: moves to next player, handles skip_turn logic
+//     - move_player: moves player based on card drawn, handles shortcuts, lose-turn, win
+//     - play_turn: draws a card, moves player, advances turn
+
+// Global variable: game (holds current Game instance)
+
+// ---------- Flask Routes ----------
+
+// "/" (GET): setup page, resets game, renders index.html
+
+// "/start" (POST): reads number of players and names from form, validates, creates new Game, redirects to game page
+
+// "/game" (GET): shows game board, redirects to setup if no game
+
+// "/draw" (POST): processes a turn for current player, draws card, moves player, advances turn, redirects to game
+
+// "/reset" (POST): resets game, flashes message, redirects to setup
+
+// Main block:
+//   - Ensures static/images directory exists
+//   - Starts Flask app on port 5000, debug mode
