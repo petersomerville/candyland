@@ -36,6 +36,13 @@
                    class="square-image"
                    title="{{ square.picture_name }}">
             {% endif %}
+            
+            {% if square.is_finish %}
+              <img src="{{ url_for('static', filename='images/final-castle.jpeg') }}"
+                   alt="Final Castle"
+                   class="square-image"
+                   title="Finish">
+            {% endif %}
           
             <span class="square-content">
               {% if square.is_start %}
