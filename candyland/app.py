@@ -229,7 +229,6 @@ class Game:
 
 # ---------- Global Game Instance ----------
 game = None
-
 # ---------- Flask Routes ----------
 
 
