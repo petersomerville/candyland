@@ -98,14 +98,16 @@ class Board:
                 board.append(Square(i, color=None, is_start=True))
             elif i == total_spaces - 1:
                 # Assign finish square image and name
-                board.append(Square(
-                    i,
-                    color="red",
-                    is_finish=True,
-                    is_picture=True,
-                    picture_name="Candy Castle",
-                    image_filename=PICTURE_IMAGES.get("Candy Castle"),
-                ))
+                board.append(
+                    Square(
+                        i,
+                        color="red",
+                        is_finish=True,
+                        is_picture=True,
+                        picture_name="Candy Castle",
+                        image_filename=PICTURE_IMAGES.get("Candy Castle"),
+                    )
+                )
             else:
                 color = COLORS[(i - 1) % len(COLORS)]
                 board.append(Square(i, color=color))

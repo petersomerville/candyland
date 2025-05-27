@@ -1,5 +1,7 @@
 import unittest
-from app import Game, COLORS, PICTURE_CARDS
+
+from app import COLORS, PICTURE_CARDS, Game
+
 
 class TestCandylandGame(unittest.TestCase):
     def setUp(self):
@@ -16,8 +18,8 @@ class TestCandylandGame(unittest.TestCase):
         player = self.game.get_current_player()
         # Create a single red card and move player manually.
         card = type("TestCard", (), {})()  # dummy card object
-        card.card_type = 'single'
-        card.value = 'red'
+        card.card_type = "single"
+        card.value = "red"
         orig_pos = player.position
         self.game.move_player(player, card)
         # Ensure player position is increased.
@@ -28,7 +30,7 @@ class TestCandylandGame(unittest.TestCase):
         # Find a picture card value from the list:
         picture = PICTURE_CARDS[0]  # "Peppermint Forest"
         card = type("TestCard", (), {})()
-        card.card_type = 'picture'
+        card.card_type = "picture"
         card.value = picture
         self.game.move_player(player, card)
         # Check that player's position matches the designated picture square.
@@ -47,10 +49,11 @@ class TestCandylandGame(unittest.TestCase):
         # Assume board square 120 is a lose-turn square.
         player.position = 119
         dummy_card = type("TestCard", (), {})()
-        dummy_card.card_type = 'single'
+        dummy_card.card_type = "single"
         dummy_card.value = self.game.board.spaces[120].color
         self.game.move_player(player, dummy_card)
         self.assertTrue(player.skip_turn)
+
 
 if __name__ == "__main__":
     unittest.main()
